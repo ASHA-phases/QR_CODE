@@ -1,16 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, } from 'react-router-dom';
-import Header from './components/shared/Header';
-
-
+import { Provider } from 'react-redux';
+import { store } from './components/redux/store';
+import ContactForm from './components/ContactForm';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Header />
-  
-   
-    </Router>
+    <Provider store={store}>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <ContactForm />
+      </div>
+    </Provider>
   );
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -38,16 +39,30 @@ const Header: React.FC = () => {
             QR Code
           </Typography>
           <Box className={classes.navLinks}>
-            <Button color="inherit" className={classes.navLink}>Qr codes</Button>
+           
+            <Button color="inherit" component={Link} to="/home" className={classes.navLink}>
+            Qr codes
+            </Button>
             <Button color="inherit" className={classes.navLink}>API</Button>
-            <Button color="inherit" className={classes.navLink}>Contact Us</Button>
-            <Button color="inherit" className={classes.navLink}>FAQ</Button>
-            <Button color="inherit" className={classes.navLink}>Why us?</Button>
+            <Button color="inherit" component={Link} to="/contact" className={classes.navLink}>
+              Contact Us
+            </Button>
+            <Button color="inherit" component={Link} to="/faq" className={classes.navLink}>
+              FAQ
+            </Button>
+            <Button color="inherit" component={Link} to="/plans" className={classes.navLink}>
+            Plans
+            </Button>
+            
             <Button color="inherit" className={classes.navLink}>Blog</Button>
           </Box>
           <Box className={classes.authButtons}>
-            <Button variant="contained" style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>Sign UP</Button>
-            <Button variant="contained" style={{ backgroundColor: 'green' }} className={classes.authButton}>Login</Button>
+            <Button variant="contained" component={Link} to="/register"  style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>
+              Sign UP
+            </Button>
+            <Button variant="contained" component={Link} to="/login" style={{ backgroundColor: 'green' }} className={classes.authButton}>
+              Login
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

@@ -19,7 +19,7 @@ const App: React.FC = () => {
         <Header />
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
           <Routes>
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
             <Route path="/contact" element={<ContactForm />} />
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/plans" element={<PricingPlans />} />

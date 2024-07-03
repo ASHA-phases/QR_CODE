@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     display: 'flex',
     flexGrow: 1,
     justifyContent: 'center',
+    marginRight: '314px',
   },
   navLink: {
     margin: '0 10px',
@@ -39,9 +40,9 @@ const Header: React.FC = () => {
             QR Code
           </Typography>
           <Box className={classes.navLinks}>
-           
-            <Button color="inherit" component={Link} to="/home" className={classes.navLink}>
-            Qr codes
+
+            <Button color="inherit" component={Link} to="/" className={classes.navLink}>
+              Qr codes
             </Button>
             <Button color="inherit" className={classes.navLink}>API</Button>
             <Button color="inherit" component={Link} to="/contact" className={classes.navLink}>
@@ -51,13 +52,13 @@ const Header: React.FC = () => {
               FAQ
             </Button>
             <Button color="inherit" component={Link} to="/plans" className={classes.navLink}>
-            Plans
+              Plans
             </Button>
-            
+
             <Button color="inherit" className={classes.navLink}>Blog</Button>
           </Box>
           <Box className={classes.authButtons}>
-            <Button variant="contained" component={Link} to="/register"  style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>
+            <Button variant="contained" component={Link} to="/register" style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>
               Sign UP
             </Button>
             <Button variant="contained" component={Link} to="/login" style={{ backgroundColor: 'green' }} className={classes.authButton}>

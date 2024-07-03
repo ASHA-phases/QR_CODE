@@ -46,7 +46,7 @@ const faqs = [
 
 const FAQPage: React.FC = () => {
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ marginTop:'100px'}}>
       <Box textAlign="center" mt={4}>
         <Typography variant="h4" component="h1" gutterBottom>
           Frequently asked questions

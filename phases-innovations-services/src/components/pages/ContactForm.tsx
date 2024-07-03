@@ -7,7 +7,8 @@ import {
   Container,
   TextField,
   Typography,
-  Paper
+  Paper,
+  Grid
 } from '@mui/material';
 
 const ContactForm: React.FC = () => {
@@ -30,65 +31,74 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Contact Us
-      </Typography>
-      <Typography variant="subtitle1" gutterBottom>
-        And a subheading describing your site, too
-      </Typography>
-      <Paper elevation={3} sx={{ p: 4, mt: 2 }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          <TextField
-            fullWidth
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            required
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            required
-          />
-          <TextField
-            fullWidth
-            label="Subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            required
-          />
-          <TextField
-            fullWidth
-            label="How can we help you?"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            margin="normal"
-            variant="outlined"
-            multiline
-            rows={4}
-            required
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, backgroundColor: 'green', color: 'black', '&:hover': { backgroundColor: 'green', color: 'white' } }}
-          >
-            Send Message
-          </Button>
+    <Container maxWidth="md">
+      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Contact Us
+        </Typography>
+        <Typography variant="subtitle1" align="center" gutterBottom>
+          Get in touch with us for any inquiries
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, mb: 4 }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                variant="outlined"
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Message"
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                variant="outlined"
+                multiline
+                rows={4}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Send Message
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       </Paper>
     </Container>

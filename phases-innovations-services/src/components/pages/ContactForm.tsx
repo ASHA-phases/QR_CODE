@@ -8,7 +8,9 @@ import {
   TextField,
   Typography,
   Paper,
-  Grid
+  Grid,
+  Divider,
+  CircularProgress
 } from '@mui/material';
 
 const ContactForm: React.FC = () => {
@@ -19,26 +21,42 @@ const ContactForm: React.FC = () => {
     subject: '',
     message: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(submitForm(formData));
-    // Reset form or show success message
+    setLoading(true);
+    try {
+      await dispatch(submitForm(formData));
+      setSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error) {
+      // handle error
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
+      <Paper elevation={3} sx={{ p: 4, mt: 8, borderRadius: 10 }}>
         <Typography variant="h4" align="center" gutterBottom>
           Contact Us
         </Typography>
         <Typography variant="subtitle1" align="center" gutterBottom>
           Get in touch with us for any inquiries
         </Typography>
+        <Divider sx={{ mb: 4 }} />
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, mb: 4 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
@@ -50,6 +68,7 @@ const ContactForm: React.FC = () => {
                 onChange={handleChange}
                 variant="outlined"
                 required
+                sx={{ borderRadius: 10 }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -62,6 +81,7 @@ const ContactForm: React.FC = () => {
                 onChange={handleChange}
                 variant="outlined"
                 required
+                sx={{ borderRadius: 10 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -73,6 +93,7 @@ const ContactForm: React.FC = () => {
                 onChange={handleChange}
                 variant="outlined"
                 required
+                sx={{ borderRadius: 10 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -86,6 +107,7 @@ const ContactForm: React.FC = () => {
                 multiline
                 rows={4}
                 required
+                sx={{ borderRadius: 10 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -94,11 +116,22 @@ const ContactForm: React.FC = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
+                disabled={loading}
+                sx={{ borderRadius: 10, py: 2 }}
               >
-                Send Message
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  'Send Message'
+                )}
               </Button>
             </Grid>
           </Grid>
+          {success && (
+            <Typography variant="body1" align="center" gutterBottom sx={{ mt: 2, color: 'green' }}>
+              Message sent successfully!
+            </Typography>
+          )}
         </Box>
       </Paper>
     </Container>

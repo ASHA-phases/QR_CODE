@@ -1,76 +1,139 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import React, { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import { styled, useTheme } from '@mui/material/styles';
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
+const HeaderRoot = styled('div')(({ theme }) => ({
+  flexGrow: 1,
+}));
+
+const NavLinks = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexGrow: 1,
+  justifyContent: 'center',
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
   },
-  title: {
-    flexGrow: 1,
+}));
+
+const AuthButtons = styled(Box)(({ theme }) => ({
+  marginLeft: 'auto',
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
   },
-  navLinks: {
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'center',
-    marginRight: '314px',
+}));
+
+const MenuButton = styled(IconButton)(({ theme }) => ({
+  display: 'none',
+  [theme.breakpoints.down('md')]: {
+    display: 'block',
   },
-  navLink: {
-    margin: '0 10px',
-    textTransform: 'none',
-  },
-  authButtons: {
-    marginLeft: 'auto',
-  },
-  authButton: {
-    marginLeft: '10px',
-    textTransform: 'none',
-  },
+}));
+
+const DrawerList = styled('div')({
+  width: 250,
 });
 
 const Header: React.FC = () => {
-  const classes = useStyles();
+  const theme = useTheme();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
 
   return (
-    <div className={classes.root}>
+    <HeaderRoot>
       <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
             QR Code
           </Typography>
-          <Box className={classes.navLinks}>
-
-            <Button color="inherit" component={Link} to="/" className={classes.navLink}>
+          <NavLinks>
+            <Button color="inherit" component={Link} to="/">
               Qr codes
             </Button>
-            <Button color="inherit" className={classes.navLink}>API</Button>
-            <Button color="inherit" component={Link} to="/contact" className={classes.navLink}>
+            <Button color="inherit">
+              API
+            </Button>
+            <Button color="inherit" component={Link} to="/contact">
               Contact Us
             </Button>
-            <Button color="inherit" component={Link} to="/faq" className={classes.navLink}>
+            <Button color="inherit" component={Link} to="/faq">
               FAQ
             </Button>
-            <Button color="inherit" component={Link} to="/plans" className={classes.navLink}>
+            <Button color="inherit" component={Link} to="/plans">
               Plans
             </Button>
-
-            <Button color="inherit" component={Link} to="/blog" className={classes.navLink}>
+            <Button color="inherit" component={Link} to="/blog">
               Blog
             </Button>
-          </Box>
-          <Box className={classes.authButtons}>
-            <Button variant="contained" component={Link} to="/register" style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>
+          </NavLinks>
+          <AuthButtons>
+            <Button
+              variant="contained"
+              component={Link}
+              to="/register"
+              style={{ backgroundColor: 'green', marginRight: '10px' }}
+            >
               Sign UP
             </Button>
-            <Button variant="contained" component={Link} to="/login" style={{ backgroundColor: 'green' }} className={classes.authButton}>
+            <Button
+              variant="contained"
+              component={Link}
+              to="/login"
+              style={{ backgroundColor: 'green' }}
+            >
               Login
             </Button>
-            
-          </Box>
+          </AuthButtons>
+          <MenuButton edge="end" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
+            <MenuIcon />
+          </MenuButton>
+          <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <DrawerList role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+              <List>
+                <ListItem button component={Link} to="/">
+                  <ListItemText primary="Qr codes" />
+                </ListItem>
+                <ListItem button component={Link} to="/contact">
+                  <ListItemText primary="Contact Us" />
+                </ListItem>
+                <ListItem button component={Link} to="/faq">
+                  <ListItemText primary="FAQ" />
+                </ListItem>
+                <ListItem button component={Link} to="/plans">
+                  <ListItemText primary="Plans" />
+                </ListItem>
+                <ListItem button component={Link} to="/blog">
+                  <ListItemText primary="Blog" />
+                </ListItem>
+                <Divider />
+                <ListItem button component={Link} to="/register">
+                  <ListItemText primary="Sign UP" />
+                </ListItem>
+                <ListItem button component={Link} to="/login">
+                  <ListItemText primary="Login" />
+                </ListItem>
+              </List>
+            </DrawerList>
+          </Drawer>
         </Toolbar>
       </AppBar>
-    </div>
+    </HeaderRoot>
   );
 };
 

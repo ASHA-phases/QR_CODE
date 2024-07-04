@@ -1,299 +1,115 @@
+// pages/HomePage.tsx
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
+import { Container, Grid, Paper, Box, Typography, Button } from "@mui/material";
+import QRCodeGenerator from "../QRCodeGenerator";
+import QRCodeTypes from "../QRCodeTypes";
+import LinkForm from "../QRCodeForms/LinkForm";
+import EmailForm from "../QRCodeForms/EmailForm";
+import VCardForm from "../QRCodeForms/VCardForm";
+import SmsForm from "../QRCodeForms/SmsForm";
+import WifiForm from "../QRCodeForms/WifiForm";
+import TextForm from "../QRCodeForms/TextForm";
+import CallForm from "../QRCodeForms/CallForm";
+import WhatsappForm from "../QRCodeForms/WhatsappForm";
+import EventForm from "../QRCodeForms/EventForm";
+import PdfForm from "../QRCodeForms/PdfForm";
+import AppForm from "../QRCodeForms/AppForm";
+import ImagesForm from "../QRCodeForms/ImageForm";
+import VideoForm from "../QRCodeForms/VideoForm";
+import SocialMediaForm from "../QRCodeForms/SocialmediaForm";
+import LocationForm from "../QRCodeForms/LocationForm";
+import FacebookForm from "../QRCodeForms/FacebookForm";
+import TwitterForm from "../QRCodeForms/TwitterForm";
+import MP3Form from "../QRCodeForms/Mp3Form";
+import { generateQRCode } from "../Services/api";
 
-const IndexPage: React.FC = () => {
+const HomePage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
-  const isSignedIn = false; // Change this variable based on user sign-in status
+  const [generatedQRCode, setGeneratedQRCode] = useState<string | null>(null);
+
+  const handleGenerateQRCode = async (formData: any) => {
+    try {
+      let qrCodeData;
+      switch (selectedType) {
+        case "Link":
+        case "Email":
+        case "Sms":
+        case "VCard":
+        case "Call":
+        case "Whatsapp":
+        case "Wifi":
+        case "Location":
+          qrCodeData = await generateQRCode(formData); // Replace with actual API call
+          break;
+        case "Text":
+          qrCodeData = await generateQRCode({ text: formData.text }); // Example for Text form
+          break;
+        case "Facebook":
+          qrCodeData = await generateQRCode({ facebookUrl: formData.facebookUrl }); // Example for Facebook form
+          break;
+        case "Twitter":
+          qrCodeData = await generateQRCode({ twitterUrl: formData.twitterUrl }); // Example for Twitter form
+          break;
+        default:
+          break;
+      }
+      
+      if (qrCodeData) {
+        setGeneratedQRCode(qrCodeData); // Assuming API returns QR code data
+      } else {
+        console.error("Empty QR code data returned.");
+      }
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
+  };
+
+  // Determine if the form requires showing the generate button
+  const shouldShowGenerateButtonForForm = (type: string | null) => {
+    return [
+      "Link", "Email", "Sms", "VCard", "Call", "Whatsapp", "Wifi", 
+      "Location", "Text", "Facebook", "Twitter" // Add types here as needed
+    ].includes(type || "");
+  };
 
   const renderForm = () => {
     switch (selectedType) {
       case "Link":
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Submit URL"
-              placeholder="https://"
-              margin="normal"
-            />
-            <Typography variant="body2">
-              Your QR code will open this URL.
-            </Typography>
-          </>
-        );
+        return <LinkForm onGenerate={handleGenerateQRCode} />;
       case "Email":
-        return (
-          <>
-            <TextField fullWidth label="Email" margin="normal" />
-            <TextField fullWidth label="Subject" margin="normal" />
-            <TextField fullWidth label="Message" margin="normal" />
-          </>
-        );
-      case "Text":
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Text"
-              placeholder="Write your text here"
-              margin="normal"
-            />
-            <Typography variant="body2">
-              Scanning the QR code will show this text.
-            </Typography>
-          </>
-        );
-      case "Call":
-        return (
-          <>
-            <TextField fullWidth label="Country code" margin="normal" />
-            <TextField fullWidth label="Phone number" margin="normal" />
-            <Typography variant="body2">
-              Scanning the QR code will call this number.
-            </Typography>
-          </>
-        );
-      case "Sms":
-        return (
-          <>
-            <TextField fullWidth label="Country code" margin="normal" />
-            <TextField fullWidth label="Phone number" margin="normal" />
-            <TextField fullWidth label="Message" margin="normal" />
-            <Typography variant="body2">
-              Scanning the QR code will send message to the phone number.
-            </Typography>
-          </>
-        );
-      case "Whatsapp":
-        return (
-          <>
-            <TextField fullWidth label="Country code" margin="normal" />
-            <TextField fullWidth label="Phone number" margin="normal" />
-            <TextField fullWidth label="Message" margin="normal" />
-            <Typography variant="body2">
-              Scanning the QR code will send WhatsApp message to the phone
-              number.
-            </Typography>
-          </>
-        );
-      case "Wifi":
-        return (
-          <>
-            <TextField fullWidth label="Network name" margin="normal" />
-            <TextField fullWidth label="SSID" margin="normal" />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Network type</InputLabel>
-              <Select>
-                <MenuItem value="No encryption">No encryption</MenuItem>
-                <MenuItem value="WPA/WPA2">WPA/WPA2</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField fullWidth label="Password" margin="normal" />
-            <FormControlLabel control={<Checkbox />} label="Hidden" />
-            <Typography variant="body2">
-              Scanning the QR code will connect to WI-FI.
-            </Typography>
-          </>
-        );
-      case "Event":
-        return (
-          <>
-            <Typography variant="body2">
-              Invite people to your event.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: "green" }}
-              fullWidth
-            >
-              Sign up for free
-            </Button>
-          </>
-        );
+        return <EmailForm onGenerate={handleGenerateQRCode} />;
       case "VCard":
-        return (
-          <>
-            <TextField fullWidth label="First name" margin="normal" />
-            <TextField fullWidth label="Last name" margin="normal" />
-            <TextField fullWidth label="Phone number" margin="normal" />
-            <TextField fullWidth label="Mobile" margin="normal" />
-            <TextField fullWidth label="E-mail" margin="normal" />
-            <TextField
-              fullWidth
-              label="Website"
-              placeholder="https://"
-              margin="normal"
-            />
-            <TextField fullWidth label="Company" margin="normal" />
-            <TextField fullWidth label="Job title" margin="normal" />
-            <TextField fullWidth label="Fax" margin="normal" />
-            <TextField fullWidth label="Address" margin="normal" />
-            <TextField fullWidth label="City" margin="normal" />
-            <TextField fullWidth label="Post code" margin="normal" />
-            <TextField fullWidth label="Country" margin="normal" />
-            <Typography variant="body2">
-              Your QR code will save this contact to the phone scanning.
-            </Typography>
-          </>
-        );
+        return <VCardForm onGenerate={handleGenerateQRCode} />;
+      case "Sms":
+        return <SmsForm onGenerate={handleGenerateQRCode} />;
+      case "Wifi":
+        return <WifiForm onGenerate={handleGenerateQRCode} />;
+      case "Text":
+        return <TextForm onGenerate={handleGenerateQRCode} />;
+      case "Call":
+        return <CallForm onGenerate={handleGenerateQRCode} />;
+      case "Whatsapp":
+        return <WhatsappForm onGenerate={handleGenerateQRCode} />;
+      case "Event":
+        return <EventForm onGenerate={handleGenerateQRCode} />;
       case "Pdf":
-        return (
-          <>
-            <Typography variant="body2">
-              Share PDF Document inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <PdfForm onGenerate={handleGenerateQRCode} />;
       case "App":
-        return (
-          <>
-            <Typography variant="body2">
-              Download apps Android & iOS.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <AppForm onGenerate={handleGenerateQRCode} />;
       case "Images":
-        return (
-          <>
-            <Typography variant="body2">
-              Share multiple images inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <ImagesForm onGenerate={handleGenerateQRCode} />;
       case "Video":
-        return (
-          <>
-            <Typography variant="body2">
-              Share a video inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <VideoForm onGenerate={handleGenerateQRCode} />;
       case "SocialMedia":
-        return (
-          <>
-            <Typography variant="body2">
-              A place to share all your social media profiles.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <SocialMediaForm onGenerate={handleGenerateQRCode} />;
       case "Mp3":
-        return (
-          <>
-            <Typography variant="body2">
-              Share an audio inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <MP3Form onGenerate={handleGenerateQRCode} />;
       case "Location":
-        return (
-          <>
-            <Typography variant="body2">
-              Share a location inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <LocationForm onGenerate={handleGenerateQRCode} />;
       case "Facebook":
-        return (
-          <>
-            <Typography variant="body2">
-              Share your Facebook Profile inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <FacebookForm onGenerate={handleGenerateQRCode} />;
       case "Twitter":
-        return (
-          <>
-            <Typography variant="body2">
-              Share your Twitter Profile inside your QR Code.
-            </Typography>
-            <Box display="flex" justifyContent="center">
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "green", width: "200px" }}
-              >
-                Sign up for free
-              </Button>
-            </Box>
-          </>
-        );
+        return <TwitterForm onGenerate={handleGenerateQRCode} />;
       default:
         return null;
     }
@@ -308,6 +124,7 @@ const IndexPage: React.FC = () => {
         <Typography variant="subtitle1" gutterBottom>
           Trusted by your favorite companies
         </Typography>
+        {/* Example Explore Button */}
         <Button variant="contained" style={{ backgroundColor: "green" }}>
           Explore
         </Button>
@@ -316,78 +133,13 @@ const IndexPage: React.FC = () => {
       <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{ padding: "20px", textAlign: "center" }}>
-            <Box mb={2}></Box>
-            <Grid container spacing={2}>
-              {[
-                "Link",
-                "Email",
-                "Text",
-                "Call",
-                "Sms",
-                "V-card",
-                "Whatsapp",
-                "Wifi",
-                "Event",
-                "Pdf",
-                "App",
-                "Images",
-                "Video",
-                "Social Media",
-                "Mp3",
-                "Location",
-                "Facebook",
-                "Twitter",
-              ].map((type) => (
-                <Grid item xs={4} key={type}>
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    onClick={() => setSelectedType(type)}
-                  >
-                    {type}
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
+            <QRCodeTypes setSelectedType={setSelectedType} />
           </Paper>
         </Grid>
 
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{ padding: "20px", textAlign: "center" }}>
-            <Box mb={2}>
-              <img
-                src="https://th.bing.com/th?id=OIP.IuJeGhNKgaISjYpSpxRJWQHaHW&w=251&h=248&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2"
-                alt="QR Code"
-                style={{ width: "50%" }}
-              />
-            </Box>
-            <Box mb={2}>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "teal" }}
-                fullWidth
-              >
-                Download PNG
-              </Button>
-            </Box>
-            <Box mb={2}>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "teal" }}
-                fullWidth
-              >
-                Download SVG
-              </Button>
-            </Box>
-            <Box mb={2}>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "teal" }}
-                fullWidth
-              >
-                Download PDF
-              </Button>
-            </Box>
+            <QRCodeGenerator generatedQRCode={generatedQRCode} />
           </Paper>
         </Grid>
       </Grid>
@@ -398,33 +150,19 @@ const IndexPage: React.FC = () => {
             {selectedType} QR Code
           </Typography>
           <Paper elevation={3} style={{ padding: "20px" }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                {renderForm()}
-              </Grid>
-              <Grid item xs={12}>
-                {(selectedType !== "Event" &&
-                  selectedType !== "Pdf" &&
-                  selectedType !== "App" &&
-                  selectedType !== "Images" &&
-                  selectedType !== "Video" &&
-                  selectedType !== "SocialMedia" &&
-                  selectedType !== "Mp3" &&
-                  selectedType !== "Location" &&
-                  selectedType !== "Facebook" &&
-                  selectedType !== "Twitter") ||
-                isSignedIn ? (
-                  <Box display="flex" justifyContent="center">
-                    <Button
-                      variant="contained"
-                      style={{ backgroundColor: "black" }}
-                    >
-                      Generate QR Code
-                    </Button>
-                  </Box>
-                ) : null}
-              </Grid>
-            </Grid>
+            {renderForm()}
+            {/* Conditionally render Generate QR Code button based on form requirement */}
+            {shouldShowGenerateButtonForForm(selectedType) && (
+              <Box mt={2}>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "black", color: "white" }}
+                  onClick={() => handleGenerateQRCode({})} // Pass empty object or appropriate form data here
+                >
+                  Generate QR Code
+                </Button>
+              </Box>
+            )}
           </Paper>
         </Box>
       )}
@@ -445,11 +183,8 @@ const IndexPage: React.FC = () => {
             { type: "Sms", description: "Send message" },
             { type: "Whatsapp", description: "Send whatsapp message" },
             { type: "Wifi", description: "Connect to Wi-Fi" },
-            {
-              type: "Event",
-              description: "Save contact to the phone scanning",
-            },
-            { type: "VCard", description: "Invite people to your event" },
+            { type: "Event", description: "Invite people to your event" },
+            { type: "VCard", description: "Save contact to the phone scanning" },
           ].map((item) => (
             <Grid item xs={12} sm={4} key={item.type}>
               <Paper
@@ -462,6 +197,7 @@ const IndexPage: React.FC = () => {
                 <Typography variant="body2" gutterBottom>
                   {item.description}
                 </Typography>
+                {/* Select button to choose QR code type */}
                 <Button
                   variant="contained"
                   style={{ backgroundColor: "teal" }}
@@ -478,7 +214,4 @@ const IndexPage: React.FC = () => {
   );
 };
 
-export default IndexPage;
-
-// Add an empty export statement to make this file a module
-export {};
+export default HomePage;

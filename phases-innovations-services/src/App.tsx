@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from './components/redux/store';
+import Blog from './components/pages/Blog';
 import ContactForm from './components/pages/ContactForm';
 import FAQPage from './components/pages/FAQPage';
 import Header from './components/shared/Header';
@@ -9,6 +10,7 @@ import PricingPlans from './components/pages/Pricingplans';
 import HomePage from './components/public/HomePage';
 import Login from './components/UserManagement/Login';
 import Register from './components/UserManagement/Register';
+
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -25,6 +27,7 @@ const App: React.FC = () => {
             <Route path="/plans" element={<PricingPlans />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/blog" element={<Blog />} />
 
           </Routes>
         </div>

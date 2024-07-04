@@ -55,7 +55,9 @@ const Header: React.FC = () => {
               Plans
             </Button>
 
-            <Button color="inherit" className={classes.navLink}>Blog</Button>
+            <Button color="inherit" component={Link} to="/blog" className={classes.navLink}>
+              Blog
+            </Button>
           </Box>
           <Box className={classes.authButtons}>
             <Button variant="contained" component={Link} to="/register" style={{ backgroundColor: 'green', marginRight: '10px' }} className={classes.authButton}>
@@ -64,6 +66,7 @@ const Header: React.FC = () => {
             <Button variant="contained" component={Link} to="/login" style={{ backgroundColor: 'green' }} className={classes.authButton}>
               Login
             </Button>
+            
           </Box>
         </Toolbar>
       </AppBar>

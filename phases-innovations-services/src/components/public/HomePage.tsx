@@ -624,8 +624,58 @@ const HomePage: React.FC = () => {
           </Paper>
         </Box>
       )}
+
+
+<Box mt={5}>
+        <Typography variant="h5" gutterBottom>
+          QR Code Types
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          Different QR Code types you can use for Static QR Codes.
+        </Typography>
+        <Grid container spacing={3}>
+          {[
+            { type: "Link", description: "Link to any Website URL" },
+            { type: "Email", description: "Send an email" },
+            { type: "Text", description: "Share text" },
+            { type: "Call", description: "Make a call" },
+            { type: "Sms", description: "Send message" },
+            { type: "Whatsapp", description: "Send whatsapp message" },
+            { type: "Wifi", description: "Connect to Wi-Fi" },
+            {
+              type: "Event",
+              description: "Save contact to the phone scanning",
+            },
+            { type: "VCard", description: "Invite people to your event" },
+          ].map((item) => (
+            <Grid item xs={12} sm={4} key={item.type}>
+              <Paper
+                elevation={3}
+                style={{ padding: "20px", textAlign: "center" }}
+              >
+                <Typography variant="h6" gutterBottom>
+                  {item.type}
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                  {item.description}
+                </Typography>
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: "teal" }}
+                  onClick={() => setSelectedType(item.type)}
+                >
+                  Choose
+                </Button>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Container>
+    
   );
+
+  
 };
 
 export default HomePage;

@@ -1,268 +1,69 @@
 import React from 'react';
-import { Container, Typography, Paper, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, Paper, Box, useTheme, useMediaQuery } from '@mui/material';
 
-const ApiDocumentation = () => {
+interface RequestData {
+  [key: string]: string | number | boolean | object;
+}
+
+const ApiDocumentation: React.FC = () => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const getRequestResponseContent = (type: string, data: RequestData) => (
+    <>
+      <Typography variant="body1" paragraph>
+        <strong>Request:</strong>
+        <Box component="pre" sx={{ overflowX: 'auto', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+          {`POST /qr-code/generate
+{
+  "type": "${type}",
+  "data": ${JSON.stringify(data, null, 2)}
+}`}
+        </Box>
+      </Typography>
+      <Typography variant="body1" paragraph>
+        <strong>Response:</strong>
+        <Box component="pre" sx={{ overflowX: 'auto', whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+          {`{
+  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+}`}
+        </Box>
+      </Typography>
+    </>
+  );
+
   return (
-    <Container>
-      <Typography variant="h2" gutterBottom>
+    <Container maxWidth="lg">
+      <Typography variant={isSmallScreen ? "h3" : "h2"} gutterBottom>
         QR Code Generator API Documentation
       </Typography>
 
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          API Endpoint
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request URL:</strong> <code>http://localhost:4000/qr-code/generate</code>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate Text QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Text",
-  "data": {
-    "text": "Hello World"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate Link QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Link",
-  "data": {
-    "url": "https://example.com"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate Email QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Email",
-  "data": {
-    "email": "example@example.com",
-    "subject": "Hello",
-    "message": "This is a test email"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate Call QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Call",
-  "data": {
-    "countryCode": "+1",
-    "phoneNumber": "1234567890"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate SMS QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Sms",
-  "data": {
-    "countryCode": "+1",
-    "phoneNumber": "1234567890",
-    "message": "Hello from SMS"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate WhatsApp QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Whatsapp",
-  "data": {
-    "countryCode": "+1",
-    "phoneNumber": "1234567890",
-    "message": "Hello from WhatsApp"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate WiFi QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "Wifi",
-  "data": {
-    "networkName": "MyWiFi",
-    "ssid": "mySSID",
-    "networkType": "WPA",
-    "password": "password123",
-    "hidden": false
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
-
-      <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-        <Typography variant="h5" gutterBottom>
-          Generate VCard QR Code
-        </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Request:</strong>
-          <pre>
-            {`
-POST /qr-code/generate
-{
-  "type": "VCard",
-  "data": {
-    "firstName": "John",
-    "lastName": "Doe",
-    "phoneNumber": "1234567890",
-    "mobile": "0987654321",
-    "email": "john.doe@example.com",
-    "website": "https://example.com",
-    "company": "Example Co.",
-    "jobTitle": "Software Engineer",
-    "fax": "1234567890",
-    "address": "123 Main St",
-    "city": "Anytown",
-    "postCode": "12345",
-    "country": "USA"
-  }
-}
-            `}
-          </pre>
-          <strong>Response:</strong>
-          <pre>
-            {`
-{
-  "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
-}
-            `}
-          </pre>
-        </Typography>
-      </Paper>
+      {[
+        { title: "API Endpoint", content: (
+          <>
+            <Typography variant="body1" paragraph>
+              <strong>Request URL:</strong> <code>http://localhost:4000/qr-code/generate</code>
+            </Typography>
+          </>
+        )},
+        { title: "Generate Text QR Code", content: getRequestResponseContent("Text", { text: "Hello World" })},
+        { title: "Generate Link QR Code", content: getRequestResponseContent("Link", { url: "https://example.com" })},
+        { title: "Generate Email QR Code", content: getRequestResponseContent("Email", { email: "example@example.com", subject: "Hello", message: "This is a test email" })},
+        { title: "Generate Call QR Code", content: getRequestResponseContent("Call", { countryCode: "+1", phoneNumber: "1234567890" })},
+        { title: "Generate SMS QR Code", content: getRequestResponseContent("Sms", { countryCode: "+1", phoneNumber: "1234567890", message: "Hello from SMS" })},
+        { title: "Generate WhatsApp QR Code", content: getRequestResponseContent("Whatsapp", { countryCode: "+1", phoneNumber: "1234567890", message: "Hello from WhatsApp" })},
+        { title: "Generate WiFi QR Code", content: getRequestResponseContent("Wifi", { networkName: "MyWiFi", ssid: "mySSID", networkType: "WPA", password: "password123", hidden: false })},
+        { title: "Generate VCard QR Code", content: getRequestResponseContent("VCard", { firstName: "John", lastName: "Doe", phoneNumber: "1234567890", mobile: "0987654321", email: "john.doe@example.com", website: "https://example.com", company: "Example Co.", jobTitle: "Software Engineer", fax: "1234567890", address: "123 Main St", city: "Anytown", postCode: "12345", country: "USA" })},
+      ].map((section, index) => (
+        <Paper key={index} elevation={3} sx={{ padding: theme.spacing(2), marginBottom: theme.spacing(2) }}>
+          <Typography variant={isSmallScreen ? "h6" : "h5"} gutterBottom>
+            {section.title}
+          </Typography>
+          <Typography variant="body1" component="div">
+            {section.content}
+          </Typography>
+        </Paper>
+      ))}
     </Container>
   );
 };

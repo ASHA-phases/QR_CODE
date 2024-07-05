@@ -5,7 +5,8 @@ type QRCodeData =
   | { text: string } // For text QR codes
   | { url: string } // For link QR codes
   | { email: string; subject: string; message: string } // For email QR codes
-  | { countryCode: string; phoneNumber: string } // For call and SMS QR codes
+  | { countryCode: string; phoneNumber: string} // For call
+  | { countryCode: string; phoneNumber: string; message: string }// for sms and whatsapp
   | { networkName: string; ssid: string; networkType: string; password: string; hidden: boolean } // For WiFi QR codes
   | { firstName: string; lastName: string; phoneNumber: string; mobile: string; email: string; website: string; company: string; jobTitle: string; fax: string; address: string; city: string; postCode: string; country: string } // For VCard QR codes
   | { // Add other types as needed
@@ -25,5 +26,7 @@ export const generateQRCode = async (type: string, data: QRCodeData) => {
     throw error;
   }
 };
+
+
 
 

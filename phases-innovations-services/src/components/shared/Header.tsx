@@ -66,7 +66,7 @@ const Header: React.FC = () => {
             <Button color="inherit" component={Link} to="/">
               Qr codes
             </Button>
-            <Button color="inherit">
+            <Button color="inherit"component={Link} to="/api">
               API
             </Button>
             <Button color="inherit" component={Link} to="/contact">

@@ -10,6 +10,7 @@ import PricingPlans from './components/pages/Pricingplans';
 import HomePage from './components/public/HomePage';
 import Login from './components/UserManagement/Login';
 import Register from './components/UserManagement/Register';
+import ApiDocumentation from './components/pages/ApiDocumentation';
 
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -26,6 +27,7 @@ const App: React.FC = () => {
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/plans" element={<PricingPlans />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/api" element={<ApiDocumentation />} />
             <Route path="/register" element={<Register />} />
             <Route path="/blog" element={<Blog />} />
 

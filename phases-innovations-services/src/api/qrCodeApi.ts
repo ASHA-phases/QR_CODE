@@ -28,3 +28,5 @@ export const generateQRCode = async (type: string, data: QRCodeData) => {
 };
 
 
+
+

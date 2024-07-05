@@ -109,6 +109,10 @@ const Header: React.FC = () => {
                 <ListItem button component={Link} to="/">
                   <ListItemText primary="Qr codes" />
                 </ListItem>
+                <ListItem button component={Link} to="/api">
+                  <ListItemText primary="Api" />
+                </ListItem>
+                
                 <ListItem button component={Link} to="/contact">
                   <ListItemText primary="Contact Us" />
                 </ListItem>

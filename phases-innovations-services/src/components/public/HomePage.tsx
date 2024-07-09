@@ -16,7 +16,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material';
-import { generateQRCode } from '../../api/qrCodeApi'; // Import the API function
+import { generateQRCode, generateQRCodePDF, generateQRCodeSVG, generateQRCodePNG } from '../../api/qrCodeApi'; // Import the API function
 
 const HomePage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
   const handleGenerateQRCode = async () => {
     try {
       let qrCode;
-  
+
       switch (selectedType) {
         case 'Link':
           qrCode = await generateQRCode(selectedType, { url: inputText });
@@ -111,6 +111,76 @@ const HomePage: React.FC = () => {
       console.error('Failed to generate QR code', error);
     }
   };
+
+  const downloadQRCode = async (format: string) => {
+    if (!selectedType) return;
+
+    try {
+      let qrCodeBlob;
+
+      switch (format) {
+        case 'png':
+          qrCodeBlob = await generateQRCodePNG(selectedType, getQRCodeData());
+          break;
+        case 'svg':
+          qrCodeBlob = await generateQRCodeSVG(selectedType, getQRCodeData());
+          break;
+        case 'pdf':
+          qrCodeBlob = await generateQRCodePDF(selectedType, getQRCodeData());
+          break;
+        default:
+          throw new Error('Unsupported format');
+      }
+
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(new Blob([qrCodeBlob]));
+      link.href = url;
+      link.download = `qrcode.${format}`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download QR code', error);
+    }
+  };
+
+  const getQRCodeData = () => {
+    switch (selectedType) {
+      case 'Link':
+        return { url: inputText };
+      case 'Email':
+        return { email, subject, message };
+      case 'Text':
+        return { text: inputText };
+      case 'Call':
+        return { countryCode, phoneNumber };
+      case 'Sms':
+        return { countryCode, phoneNumber, message };
+      case 'Whatsapp':
+        return { countryCode, phoneNumber, message };
+      case 'Wifi':
+        return { networkName, ssid, networkType, password, hidden };
+      case 'VCard':
+        return {
+          firstName,
+          lastName,
+          phoneNumber,
+          mobile,
+          email: emailVCard,
+          website,
+          company,
+          jobTitle,
+          fax,
+          address,
+          city,
+          postCode,
+          country
+        };
+      // Add cases for other types if needed
+      default:
+        return {};
+    }
+  };
+
 
   const renderForm = () => {
     switch (selectedType) {
@@ -294,93 +364,93 @@ const HomePage: React.FC = () => {
             </Button>
           </>
         );
-        case 'VCard':
-          return (
-            <>
-              <TextField
-                fullWidth
-                label="First name"
-                margin="normal"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Last name"
-                margin="normal"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Phone number"
-                margin="normal"
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Mobile"
-                margin="normal"
-                onChange={(e) => setMobile(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="E-mail"
-                margin="normal"
-                onChange={(e) => setEmailVCard(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Website"
-                placeholder="https://"
-                margin="normal"
-                onChange={(e) => setWebsite(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Company"
-                margin="normal"
-                onChange={(e) => setCompany(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Job title"
-                margin="normal"
-                onChange={(e) => setJobTitle(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Fax"
-                margin="normal"
-                onChange={(e) => setFax(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Address"
-                margin="normal"
-                onChange={(e) => setAddress(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="City"
-                margin="normal"
-                onChange={(e) => setCity(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Post code"
-                margin="normal"
-                onChange={(e) => setPostCode(e.target.value)}
-              />
-              <TextField
-                fullWidth
-                label="Country"
-                margin="normal"
-                onChange={(e) => setCountry(e.target.value)}
-              />
-              <Typography variant="body2">
-                Scanning the QR code will save your contact details.
-              </Typography>
-            </>
-          );
+      case 'VCard':
+        return (
+          <>
+            <TextField
+              fullWidth
+              label="First name"
+              margin="normal"
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Last name"
+              margin="normal"
+              onChange={(e) => setLastName(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Phone number"
+              margin="normal"
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Mobile"
+              margin="normal"
+              onChange={(e) => setMobile(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="E-mail"
+              margin="normal"
+              onChange={(e) => setEmailVCard(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Website"
+              placeholder="https://"
+              margin="normal"
+              onChange={(e) => setWebsite(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Company"
+              margin="normal"
+              onChange={(e) => setCompany(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Job title"
+              margin="normal"
+              onChange={(e) => setJobTitle(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Fax"
+              margin="normal"
+              onChange={(e) => setFax(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Address"
+              margin="normal"
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="City"
+              margin="normal"
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Post code"
+              margin="normal"
+              onChange={(e) => setPostCode(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Country"
+              margin="normal"
+              onChange={(e) => setCountry(e.target.value)}
+            />
+            <Typography variant="body2">
+              Scanning the QR code will save your contact details.
+            </Typography>
+          </>
+        );
       case 'Pdf':
         return (
           <>
@@ -594,6 +664,35 @@ const HomePage: React.FC = () => {
               >
                 Generate QR Code
               </Button>
+              {qrCode && (
+                <Box mt={2} textAlign="center">
+                  <Typography variant="body2" gutterBottom>
+                    QR Code generated. Choose a format to download:
+                  </Typography>
+                  <Box mt={2}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => downloadQRCode('png')}
+                      style={{ marginRight: 8 }}
+                    >
+                      Download PNG
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => downloadQRCode('svg')}
+                      style={{ marginRight: 8 }}
+                    >
+                      Download SVG
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      onClick={() => downloadQRCode('pdf')}
+                    >
+                      Download PDF
+                    </Button>
+                  </Box>
+                </Box>
+              )}
             </Box>
           </Paper>
         </Grid>
@@ -626,7 +725,7 @@ const HomePage: React.FC = () => {
       )}
 
 
-<Box mt={5}>
+      <Box mt={5}>
         <Typography variant="h5" gutterBottom>
           QR Code Types
         </Typography>
@@ -672,10 +771,10 @@ const HomePage: React.FC = () => {
         </Grid>
       </Box>
     </Container>
-    
+
   );
 
-  
+
 };
 
 export default HomePage;

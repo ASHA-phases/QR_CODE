@@ -7,110 +7,50 @@ import {
   Container,
   Grid,
   Paper,
-  TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
 } from '@mui/material';
-import { generateQRCode, generateQRCodePDF, generateQRCodeSVG, generateQRCodePNG } from '../../api/qrCodeApi'; // Import the API function
+import { generateQRCode, generateQRCodePDF, generateQRCodeSVG, generateQRCodePNG } from '../../api/qrCodeApi';
+
+// Import all form components
+import QRCodeTypes from '../QRCodeTypes';
+import LinkForm from '../QRCodeForms/LinkForm';
+import EmailForm from '../QRCodeForms/EmailForm';
+import TextForm from '../QRCodeForms/TextForm';
+import CallForm from '../QRCodeForms/CallForm';
+import WhatsappForm from '../QRCodeForms/WhatsappForm';
+import WifiForm from '../QRCodeForms/WifiForm';
+import EventForm from '../QRCodeForms/EventForm';
+import VCardForm from '../QRCodeForms/VCardForm';
+import PdfForm from '../QRCodeForms/PdfForm';
+import AppForm from '../QRCodeForms/AppForm';
+import ImageForm from '../QRCodeForms/ImageForm';
+import VideoForm from '../QRCodeForms/VideoForm';
+import SocialMediaForm from '../QRCodeForms/SocialMediaForm';
+import Mp3Form from '../QRCodeForms/Mp3Form';
+import LocationForm from '../QRCodeForms/LocationForm';
+import SmsForm from '../QRCodeForms/SmsForm';
+import FacebookForm from '../QRCodeForms/FacebookForm';
+import TwitterForm from '../QRCodeForms/TwitterForm';
+
 
 const HomePage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [qrCode, setQrCode] = useState<string | null>(null);
-  const [inputText, setInputText] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [subject, setSubject] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
-  const [countryCode, setCountryCode] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [networkName, setNetworkName] = useState<string>('');
-  const [ssid, setSsid] = useState<string>('');
-  const [networkType, setNetworkType] = useState<string>('No encryption');
-  const [hidden, setHidden] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [mobile, setMobile] = useState<string>('');
-  const [emailVCard, setEmailVCard] = useState<string>('');
-  const [website, setWebsite] = useState<string>('');
-  const [company, setCompany] = useState<string>('');
-  const [jobTitle, setJobTitle] = useState<string>('');
-  const [fax, setFax] = useState<string>('');
-  const [address, setAddress] = useState<string>('');
-  const [city, setCity] = useState<string>('');
-  const [postCode, setPostCode] = useState<string>('');
-  const [country, setCountry] = useState<string>('');
+  const [formData, setFormData] = useState<any>({});
+
+  const handleFormChange = (values: any) => {
+    setFormData(values);
+  };
 
   const handleGenerateQRCode = async () => {
     try {
-      let qrCode;
-
-      switch (selectedType) {
-        case 'Link':
-          qrCode = await generateQRCode(selectedType, { url: inputText });
-          break;
-        case 'Email':
-          qrCode = await generateQRCode(selectedType, { email, subject, message });
-          break;
-        case 'Text':
-          qrCode = await generateQRCode(selectedType, { text: inputText });
-          break;
-        case 'Call':
-          qrCode = await generateQRCode(selectedType, { countryCode, phoneNumber });
-          break;
-        case 'Sms':
-          qrCode = await generateQRCode(selectedType, { countryCode, phoneNumber, message });
-          break;
-        case 'Whatsapp':
-          qrCode = await generateQRCode(selectedType, { countryCode, phoneNumber, message });
-          break;
-        case 'Wifi':
-          qrCode = await generateQRCode(selectedType, { networkName, ssid, networkType, password, hidden });
-          break;
-        case 'Event':
-          // Add case for Event
-          break;
-        case 'VCard':
-          qrCode = await generateQRCode(selectedType, {
-            firstName,
-            lastName,
-            phoneNumber,
-            mobile,
-            email: emailVCard,
-            website,
-            company,
-            jobTitle,
-            fax,
-            address,
-            city,
-            postCode,
-            country
-          });
-          break;
-        case 'Pdf':
-        case 'App':
-        case 'Images':
-        case 'Video':
-        case 'Social Media':
-        case 'Mp3':
-        case 'Location':
-        case 'Facebook':
-        case 'Twitter':
-          // Add cases for other types if needed
-          break;
-        default:
-          throw new Error('Unsupported QR code type');
-      }
-
+      const qrCode = await generateQRCode(selectedType!, formData);
       setQrCode(qrCode);
     } catch (error) {
       console.error('Failed to generate QR code', error);
     }
   };
+  
 
   const downloadQRCode = async (format: string) => {
     if (!selectedType) return;
@@ -120,13 +60,13 @@ const HomePage: React.FC = () => {
 
       switch (format) {
         case 'png':
-          qrCodeBlob = await generateQRCodePNG(selectedType, getQRCodeData());
+          qrCodeBlob = await generateQRCodePNG(selectedType, formData);
           break;
         case 'svg':
-          qrCodeBlob = await generateQRCodeSVG(selectedType, getQRCodeData());
+          qrCodeBlob = await generateQRCodeSVG(selectedType, formData);
           break;
         case 'pdf':
-          qrCodeBlob = await generateQRCodePDF(selectedType, getQRCodeData());
+          qrCodeBlob = await generateQRCodePDF(selectedType, formData);
           break;
         default:
           throw new Error('Unsupported format');
@@ -143,449 +83,44 @@ const HomePage: React.FC = () => {
     }
   };
 
-  const getQRCodeData = () => {
-    switch (selectedType) {
-      case 'Link':
-        return { url: inputText };
-      case 'Email':
-        return { email, subject, message };
-      case 'Text':
-        return { text: inputText };
-      case 'Call':
-        return { countryCode, phoneNumber };
-      case 'Sms':
-        return { countryCode, phoneNumber, message };
-      case 'Whatsapp':
-        return { countryCode, phoneNumber, message };
-      case 'Wifi':
-        return { networkName, ssid, networkType, password, hidden };
-      case 'VCard':
-        return {
-          firstName,
-          lastName,
-          phoneNumber,
-          mobile,
-          email: emailVCard,
-          website,
-          company,
-          jobTitle,
-          fax,
-          address,
-          city,
-          postCode,
-          country
-        };
-      // Add cases for other types if needed
-      default:
-        return {};
-    }
-  };
-
-
   const renderForm = () => {
     switch (selectedType) {
       case 'Link':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Submit URL"
-              placeholder="https://"
-              margin="normal"
-              onChange={(e) => setInputText(e.target.value)}
-            />
-            <Typography variant="body2">
-              Your QR code will open this URL.
-            </Typography>
-          </>
-        );
+        return <LinkForm onFormChange={handleFormChange} />;
       case 'Email':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Email"
-              margin="normal"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Subject"
-              margin="normal"
-              onChange={(e) => setSubject(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Message"
-              margin="normal"
-              onChange={(e) => setMessage(e.target.value)}
-            />
-          </>
-        );
+        return <EmailForm onFormChange={handleFormChange} />;
       case 'Text':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Text"
-              placeholder="Write your text here"
-              margin="normal"
-              onChange={(e) => setInputText(e.target.value)}
-            />
-            <Typography variant="body2">
-              Scanning the QR code will show this text.
-            </Typography>
-          </>
-        );
+        return <TextForm onFormChange={handleFormChange} />;
       case 'Call':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Country code"
-              margin="normal"
-              onChange={(e) => setCountryCode(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Phone number"
-              margin="normal"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <Typography variant="body2">
-              Scanning the QR code will call this number.
-            </Typography>
-          </>
-        );
+        return <CallForm onFormChange={handleFormChange} />;
       case 'Sms':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Country code"
-              margin="normal"
-              onChange={(e) => setCountryCode(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Phone number"
-              margin="normal"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Message"
-              margin="normal"
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <Typography variant="body2">
-              Scanning the QR code will send a message to the phone number.
-            </Typography>
-          </>
-        );
+        return <SmsForm onFormChange={handleFormChange} />;
       case 'Whatsapp':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Country code"
-              margin="normal"
-              onChange={(e) => setCountryCode(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Phone number"
-              margin="normal"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Message"
-              margin="normal"
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <Typography variant="body2">
-              Scanning the QR code will send a WhatsApp message to the phone number.
-            </Typography>
-          </>
-        );
+        return <WhatsappForm onFormChange={handleFormChange} />;
       case 'Wifi':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="Network name"
-              margin="normal"
-              onChange={(e) => setNetworkName(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="SSID"
-              margin="normal"
-              onChange={(e) => setSsid(e.target.value)}
-            />
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Network type</InputLabel>
-              <Select
-                value={networkType}
-                onChange={(e) => setNetworkType(e.target.value as string)}
-              >
-                <MenuItem value="No encryption">No encryption</MenuItem>
-                <MenuItem value="WPA/WPA2">WPA/WPA2</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              label="Password"
-              margin="normal"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <FormControlLabel
-              control={<Checkbox checked={hidden} onChange={() => setHidden(!hidden)} />}
-              label="Hidden"
-            />
-            <Typography variant="body2">
-              Scanning the QR code will connect to Wi-Fi.
-            </Typography>
-          </>
-        );
+        return <WifiForm onFormChange={handleFormChange} />;
       case 'Event':
-        return (
-          <>
-            <Typography variant="body2">
-              Invite people to your event.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'green' }}
-              fullWidth
-            >
-              Sign up for free
-            </Button>
-          </>
-        );
+        return <EventForm onFormChange={handleFormChange} />;
       case 'VCard':
-        return (
-          <>
-            <TextField
-              fullWidth
-              label="First name"
-              margin="normal"
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Last name"
-              margin="normal"
-              onChange={(e) => setLastName(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Phone number"
-              margin="normal"
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Mobile"
-              margin="normal"
-              onChange={(e) => setMobile(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="E-mail"
-              margin="normal"
-              onChange={(e) => setEmailVCard(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Website"
-              placeholder="https://"
-              margin="normal"
-              onChange={(e) => setWebsite(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Company"
-              margin="normal"
-              onChange={(e) => setCompany(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Job title"
-              margin="normal"
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Fax"
-              margin="normal"
-              onChange={(e) => setFax(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Address"
-              margin="normal"
-              onChange={(e) => setAddress(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="City"
-              margin="normal"
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Post code"
-              margin="normal"
-              onChange={(e) => setPostCode(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Country"
-              margin="normal"
-              onChange={(e) => setCountry(e.target.value)}
-            />
-            <Typography variant="body2">
-              Scanning the QR code will save your contact details.
-            </Typography>
-          </>
-        );
+        return <VCardForm onFormChange={handleFormChange} />;
       case 'Pdf':
-        return (
-          <>
-            <Typography variant="body2">
-              Upload your PDF file here.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'teal' }}
-              fullWidth
-            >
-              Upload PDF
-            </Button>
-          </>
-        );
+        return <PdfForm onFormChange={handleFormChange} />;
       case 'App':
-        return (
-          <>
-            <Typography variant="body2">
-              Link to your app.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'orange' }}
-              fullWidth
-            >
-              Add App
-            </Button>
-          </>
-        );
+        return <AppForm onFormChange={handleFormChange} />;
       case 'Images':
-        return (
-          <>
-            <Typography variant="body2">
-              Upload your image here.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'blue' }}
-              fullWidth
-            >
-              Upload Image
-            </Button>
-          </>
-        );
+        return <ImageForm onFormChange={handleFormChange} />;
       case 'Video':
-        return (
-          <>
-            <Typography variant="body2">
-              Add your video URL here.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'purple' }}
-              fullWidth
-            >
-              Add Video
-            </Button>
-          </>
-        );
+        return <VideoForm onFormChange={handleFormChange} />;
       case 'Social Media':
-        return (
-          <>
-            <Typography variant="body2">
-              Link to your social media profile.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'pink' }}
-              fullWidth
-            >
-              Add Social Media
-            </Button>
-          </>
-        );
+        return <SocialMediaForm onFormChange={handleFormChange} />;
       case 'Mp3':
-        return (
-          <>
-            <Typography variant="body2">
-              Add your MP3 file URL here.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'grey' }}
-              fullWidth
-            >
-              Add MP3
-            </Button>
-          </>
-        );
+        return <Mp3Form onFormChange={handleFormChange} />;
       case 'Location':
-        return (
-          <>
-            <Typography variant="body2">
-              Add your location coordinates.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'brown' }}
-              fullWidth
-            >
-              Add Location
-            </Button>
-          </>
-        );
+        return <LocationForm onFormChange={handleFormChange} />;
       case 'Facebook':
-        return (
-          <>
-            <Typography variant="body2">
-              Add your Facebook profile URL.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'blue' }}
-              fullWidth
-            >
-              Add Facebook
-            </Button>
-          </>
-        );
+        return <FacebookForm onFormChange={handleFormChange} />;
       case 'Twitter':
-        return (
-          <>
-            <Typography variant="body2">
-              Add your Twitter handle URL.
-            </Typography>
-            <Button
-              variant="contained"
-              style={{ backgroundColor: 'lightblue' }}
-              fullWidth
-            >
-              Add Twitter
-            </Button>
-          </>
-        );
+        return <TwitterForm onFormChange={handleFormChange} />;
       default:
         return null;
     }
@@ -724,7 +259,6 @@ const HomePage: React.FC = () => {
         </Box>
       )}
 
-
       <Box mt={5}>
         <Typography variant="h5" gutterBottom>
           QR Code Types
@@ -741,11 +275,17 @@ const HomePage: React.FC = () => {
             { type: "Sms", description: "Send message" },
             { type: "Whatsapp", description: "Send whatsapp message" },
             { type: "Wifi", description: "Connect to Wi-Fi" },
-            {
-              type: "Event",
-              description: "Save contact to the phone scanning",
-            },
-            { type: "VCard", description: "Invite people to your event" },
+            { type: "Event", description: "Save event to calendar" },
+            { type: "VCard", description: "Share contact information" },
+            { type: "Pdf", description: "Link to a PDF file" },
+            { type: "App", description: "Link to your app" },
+            { type: "Images", description: "Link to an image" },
+            { type: "Video", description: "Link to a video" },
+            { type: "Social Media", description: "Link to social media profiles" },
+            { type: "Mp3", description: "Link to an MP3 file" },
+            { type: "Location", description: "Share a location" },
+            { type: "Facebook", description: "Share you facebook" },
+            { type: "Twitter", description: "Share you twitter" },
           ].map((item) => (
             <Grid item xs={12} sm={4} key={item.type}>
               <Paper
@@ -771,10 +311,8 @@ const HomePage: React.FC = () => {
         </Grid>
       </Box>
     </Container>
-
   );
-
-
 };
 
 export default HomePage;
+export{};

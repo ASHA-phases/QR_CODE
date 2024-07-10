@@ -18,9 +18,9 @@ const WhatsappForm: React.FC<WhatsappFormProps> = ({ onFormChange }) => {
       countryCode: Yup.string()
         .matches(/^\+\d+$/, 'Country code must start with + and contain only digits')
         .required('Country code is required'),
-      phoneNumber: Yup.string()
-        .matches(/^\d+$/, 'Phone number must contain only digits')
-        .required('Phone number is required'),
+        phoneNumber: Yup.string()
+        .matches(/^\d{10}$/, "Phone number must be upto 10 digits")
+        .required("Phone number is required"),
       message: Yup.string()
         .required('Message is required'),
     }),

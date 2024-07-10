@@ -34,8 +34,20 @@ const AppForm: React.FC<AppFormProps> = ({ onFormChange }) => {
   });
 
   useEffect(() => {
-    onFormChange(formik.values);
-  }, [formik.values, onFormChange]);
+    if (formik.isValid && formik.dirty) {
+      const { appStoreLink, playStoreLink } = formik.values;
+      if (appStoreLink || playStoreLink) {
+        onFormChange({
+          appStoreLink: appStoreLink || undefined,
+          playStoreLink: playStoreLink || undefined,
+        });
+      } else {
+        onFormChange(null);
+      }
+    } else {
+      onFormChange(null);
+    }
+  }, [formik.values, formik.isValid, formik.dirty, onFormChange]);
 
   return (
     <>

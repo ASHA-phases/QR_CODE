@@ -19,7 +19,7 @@ const SmsForm: React.FC<Props> = ({ onFormChange }) => {
         .matches(/^\+\d+$/, "Country code must be in the format + followed by digits")
         .required("Country code is required"),
       phoneNumber: Yup.string()
-        .matches(/^\d{10,15}$/, "Phone number must be between 10 to 15 digits")
+        .matches(/^\d{10}$/, "Phone number must be upto 10 digits")
         .required("Phone number is required"),
       message: Yup.string()
         .max(160, "Message must be at most 160 characters long")

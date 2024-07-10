@@ -14,8 +14,8 @@ const LocationForm: React.FC<LocationFormProps> = ({ onFormChange }) => {
       longitude: '',
     },
     validationSchema: Yup.object({
-      latitude: Yup.number().min(-90, 'Minimum value is -90').max(90, 'Maximum value is 90').required('Latitude is required'),
-      longitude: Yup.number().min(-180, 'Minimum value is -180').max(180, 'Maximum value is 180').required('Longitude is required'),
+      latitude: Yup.number().required('Latitude is required'),
+      longitude: Yup.number().required('Longitude is required'),
     }),
     onSubmit: () => {},
   });

@@ -18,10 +18,12 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
     },
     validationSchema: Yup.object({
       eventName: Yup.string().required('Event name is required'),
-      startDate: Yup.date().required('Start date is required'),
+      startDate: Yup.date()
+        .min(new Date(), 'Start date cannot be in the past')
+        .required('Start date is required'),
       endDate: Yup.date()
-        .required('End date is required')
-        .min(Yup.ref('startDate'), 'End date must be after start date'),
+        .min(Yup.ref('startDate'), 'End date must be after start date')
+        .required('End date is required'),
       location: Yup.string().required('Location is required'),
       description: Yup.string(),
     }),
@@ -29,10 +31,23 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
   });
 
   React.useEffect(() => {
-    if (formik.isValid) {
-      onFormChange(formik.values);
+    if (formik.isValid && formik.dirty) {
+      const { eventName, startDate, endDate, location, description } = formik.values;
+      if (eventName && startDate && endDate && location) {
+        onFormChange({
+          eventName,
+          startDate,
+          endDate,
+          location,
+          description: description || undefined,
+        });
+      } else {
+        onFormChange(null);
+      }
+    } else {
+      onFormChange(null);
     }
-  }, [formik.values, formik.isValid]);
+  }, [formik.values, formik.isValid, formik.dirty, onFormChange]);
 
   return (
     <>
@@ -47,6 +62,7 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
         onBlur={formik.handleBlur}
         error={formik.touched.eventName && Boolean(formik.errors.eventName)}
         helperText={formik.touched.eventName && formik.errors.eventName}
+        required
       />
       <TextField
         fullWidth
@@ -56,11 +72,13 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
         type="datetime-local"
         margin="normal"
         InputLabelProps={{ shrink: true }}
+        inputProps={{ min: new Date().toISOString().slice(0, 16), max: formik.values.endDate || undefined }}
         value={formik.values.startDate}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.startDate && Boolean(formik.errors.startDate)}
         helperText={formik.touched.startDate && formik.errors.startDate}
+        required
       />
       <TextField
         fullWidth
@@ -70,11 +88,13 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
         type="datetime-local"
         margin="normal"
         InputLabelProps={{ shrink: true }}
+        inputProps={{ min: formik.values.startDate || new Date().toISOString().slice(0, 16) }}
         value={formik.values.endDate}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.endDate && Boolean(formik.errors.endDate)}
         helperText={formik.touched.endDate && formik.errors.endDate}
+        required
       />
       <TextField
         fullWidth
@@ -87,6 +107,7 @@ const EventForm: React.FC<EventFormProps> = ({ onFormChange }) => {
         onBlur={formik.handleBlur}
         error={formik.touched.location && Boolean(formik.errors.location)}
         helperText={formik.touched.location && formik.errors.location}
+        required
       />
       <TextField
         fullWidth

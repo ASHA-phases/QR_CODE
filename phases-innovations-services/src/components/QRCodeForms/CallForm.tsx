@@ -18,7 +18,7 @@ const CallForm: React.FC<CallFormProps> = ({ onFormChange }) => {
         .matches(/^\+\d{1,4}$/, 'Invalid country code format')
         .required('Country code is required'),
       phoneNumber: Yup.string()
-        .matches(/^\d{6,14}$/, 'Invalid phone number')
+        .matches(/^\d{10}$/, 'Phone number must be exactly 10 digits')
         .required('Phone number is required'),
     }),
     onSubmit: () => {
@@ -27,10 +27,17 @@ const CallForm: React.FC<CallFormProps> = ({ onFormChange }) => {
   });
 
   React.useEffect(() => {
-    if (formik.isValid) {
-      onFormChange(formik.values);
+    if (formik.isValid && formik.dirty) {
+      const { countryCode, phoneNumber } = formik.values;
+      if (countryCode && phoneNumber) {
+        onFormChange(formik.values);
+      } else {
+        onFormChange(null);
+      }
+    } else {
+      onFormChange(null);
     }
-  }, [formik.values, formik.isValid, onFormChange]);
+  }, [formik.values, formik.isValid, formik.dirty, onFormChange]);
 
   return (
     <>

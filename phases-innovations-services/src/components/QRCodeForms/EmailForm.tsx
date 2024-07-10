@@ -1,5 +1,3 @@
-// src/components/QRCodeForms/EmailForm.tsx
-
 import React from 'react';
 import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
@@ -17,7 +15,13 @@ const EmailForm: React.FC<EmailFormProps> = ({ onFormChange }) => {
       message: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Email is required'),
+      email: Yup.string()
+  .email('Invalid email format')
+  .matches(
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    'Invalid email format'
+  )
+  .required('Email is required'),
       subject: Yup.string().required('Subject is required'),
       message: Yup.string().required('Message is required'),
     }),
@@ -25,10 +29,17 @@ const EmailForm: React.FC<EmailFormProps> = ({ onFormChange }) => {
   });
 
   React.useEffect(() => {
-    if (formik.isValid) {
-      onFormChange(formik.values);
+    if (formik.isValid && formik.dirty) {
+      const { email, subject, message } = formik.values;
+      if (email && subject && message) {
+        onFormChange(formik.values);
+      } else {
+        onFormChange(null);
+      }
+    } else {
+      onFormChange(null);
     }
-  }, [formik.values, formik.isValid, onFormChange]);
+  }, [formik.values, formik.isValid, formik.dirty, onFormChange]);
 
   return (
     <>
@@ -78,3 +89,4 @@ const EmailForm: React.FC<EmailFormProps> = ({ onFormChange }) => {
 };
 
 export default EmailForm;
+export{};

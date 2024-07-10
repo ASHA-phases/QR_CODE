@@ -28,20 +28,30 @@ const VCardForm: React.FC<VCardFormProps> = ({ onFormChange }) => {
       firstName: Yup.string().required('First name is required'),
       lastName: Yup.string().required('Last name is required'),
       phoneNumber: Yup.string()
-        .matches(/^\+?[\d\s-]{7,}$/, 'Invalid phone number')
+        .matches(/^\+?[\d\s-]{11}$/, 'Invalid phone number')
         .required('Phone number is required'),
-      mobile: Yup.string().matches(/^\+?[\d\s-]{7,}$/, 'Invalid mobile number'),
-      email: Yup.string().email('Invalid email').required('Email is required'),
+      mobile: Yup.string().matches(/^\+?[\d\s-]{10}$/, 'Invalid mobile number'),
+      email: Yup.string()
+  .email('Invalid email format')
+  .matches(
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    'Invalid email format'
+  )
+  .required('Email is required'),
       website: Yup.string().url('Invalid URL'),
       fax: Yup.string().matches(/^\+?[\d\s-]{7,}$/, 'Invalid fax number'),
-      postCode: Yup.string().matches(/^[\d\w\s-]{3,}$/, 'Invalid post code'),
+      postCode: Yup.string()
+        .matches(/^[\d\w\s-]{6}$/, 'Invalid post code')
+        .max(6, 'Post code must be at most 6 characters'),
     }),
     onSubmit: () => {},
   });
 
   React.useEffect(() => {
-    if (formik.isValid) {
+    if (formik.isValid && Object.values(formik.values).some((value) => value)) {
       onFormChange(formik.values);
+    } else {
+      onFormChange(null);
     }
   }, [formik.values, formik.isValid, onFormChange]);
 

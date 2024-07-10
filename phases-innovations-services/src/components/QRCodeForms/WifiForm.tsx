@@ -30,8 +30,11 @@ const WifiForm: React.FC<WifiFormProps> = ({ onFormChange }) => {
   });
 
   React.useEffect(() => {
-    if (formik.isValid) {
+    const allFieldsFilled = formik.values.networkName && formik.values.ssid && (formik.values.networkType !== 'WPA/WPA2' || formik.values.password);
+    if (formik.isValid && allFieldsFilled) {
       onFormChange(formik.values);
+    } else {
+      onFormChange(null);
     }
   }, [formik.values, formik.isValid, onFormChange]);
 

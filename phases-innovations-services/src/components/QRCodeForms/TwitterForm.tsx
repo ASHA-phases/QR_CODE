@@ -16,7 +16,7 @@ const TwitterForm: React.FC<Props> = ({ onFormChange }) => {
       profileUrl: Yup.string()
         .url("Invalid URL")
         .matches(
-          /^(https?:\/\/)?(www\.)?twitter\.com\/[a-zA-Z0-9_]{1,15}\/?$/,
+          /^(https?:\/\/)?(www\.)?x\.com\/[a-zA-Z0-9_]{1,15}\/?$/,
           "Must be a valid Twitter profile URL"
         )
         .required("Twitter Profile URL is required"),
@@ -40,7 +40,7 @@ const TwitterForm: React.FC<Props> = ({ onFormChange }) => {
         id="profileUrl"
         name="profileUrl"
         label="Twitter Profile URL"
-        placeholder="https://twitter.com/yourprofile"
+        placeholder="https://x.com/yourprofile"
         margin="normal"
         value={formik.values.profileUrl}
         onChange={formik.handleChange}

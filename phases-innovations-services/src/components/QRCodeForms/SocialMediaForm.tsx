@@ -20,7 +20,7 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ onFormChange }) => {
         .matches(/^(https?:\/\/)?(www\.)?facebook\.com\/.*$/, 'Invalid Facebook URL'),
       twitterUrl: Yup.string()
         .url('Invalid URL')
-        .matches(/^(https?:\/\/)?(www\.)?twitter\.com\/.*$/, 'Invalid Twitter URL'),
+        .matches(/^(https?:\/\/)?(www\.)?x\.com\/.*$/, 'Invalid Twitter URL'),
       instagramUrl: Yup.string()
         .url('Invalid URL')
         .matches(/^(https?:\/\/)?(www\.)?instagram\.com\/.*$/, 'Invalid Instagram URL'),
@@ -71,7 +71,7 @@ const SocialMediaForm: React.FC<SocialMediaFormProps> = ({ onFormChange }) => {
         onBlur={formik.handleBlur}
         error={formik.touched.twitterUrl && Boolean(formik.errors.twitterUrl)}
         helperText={formik.touched.twitterUrl && formik.errors.twitterUrl}
-        placeholder="https://www.twitter.com/yourusername"
+        placeholder="https://www.x.com/yourusername"
       />
       <TextField
         fullWidth

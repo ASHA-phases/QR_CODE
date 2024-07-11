@@ -9,9 +9,13 @@ type QRCodeData =
   | { countryCode: string; phoneNumber: string; message: string } // For sms and whatsapp
   | { networkName: string; ssid: string; networkType: string; password: string; hidden: boolean } // For WiFi QR codes
   | { firstName: string; lastName: string; phoneNumber: string; mobile: string; email: string; website: string; company: string; jobTitle: string; fax: string; address: string; city: string; postCode: string; country: string } // For VCard QR codes
-  | { // Add other types as needed
-      // Define other types here
-    };
+  | { eventName: string; startDate: string; endDate: string; location: string; description: string } // For event QR codes
+  | { facebookUrl: string; twitterUrl: string; instagramUrl : string;} // For social media QR codes
+  | { appStoreLink: string; playStoreLink: string;}
+  | { videoUrl: string }// For video
+  | { profileUrl: string }// for facebook and twitter url 
+  | { latitude: string; longitude: string }// for facebook and twitter url 
+  ; 
 
 // API function to generate QR code
 const apiClient = axios.create({

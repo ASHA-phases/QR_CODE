@@ -21,12 +21,9 @@ import WhatsappForm from '../QRCodeForms/WhatsappForm';
 import WifiForm from '../QRCodeForms/WifiForm';
 import EventForm from '../QRCodeForms/EventForm';
 import VCardForm from '../QRCodeForms/VCardForm';
-import PdfForm from '../QRCodeForms/PdfForm';
 import AppForm from '../QRCodeForms/AppForm';
-import ImageForm from '../QRCodeForms/ImageForm';
 import VideoForm from '../QRCodeForms/VideoForm';
 import SocialMediaForm from '../QRCodeForms/SocialMediaForm';
-import Mp3Form from '../QRCodeForms/Mp3Form';
 import LocationForm from '../QRCodeForms/LocationForm';
 import SmsForm from '../QRCodeForms/SmsForm';
 import FacebookForm from '../QRCodeForms/FacebookForm';
@@ -103,18 +100,12 @@ const HomePage: React.FC = () => {
         return <EventForm onFormChange={handleFormChange} />;
       case 'VCard':
         return <VCardForm onFormChange={handleFormChange} />;
-      case 'Pdf':
-        return <PdfForm onFormChange={handleFormChange} />;
       case 'App':
         return <AppForm onFormChange={handleFormChange} />;
-      case 'Images':
-        return <ImageForm onFormChange={handleFormChange} />;
       case 'Video':
         return <VideoForm onFormChange={handleFormChange} />;
       case 'Social Media':
         return <SocialMediaForm onFormChange={handleFormChange} />;
-      case 'Mp3':
-        return <Mp3Form onFormChange={handleFormChange} />;
       case 'Location':
         return <LocationForm onFormChange={handleFormChange} />;
       case 'Facebook':
@@ -155,12 +146,9 @@ const HomePage: React.FC = () => {
                 'Wifi',
                 'Event',
                 'VCard',
-                'Pdf',
                 'App',
-                'Images',
                 'Video',
                 'Social Media',
-                'Mp3',
                 'Location',
                 'Facebook',
                 'Twitter',
@@ -277,12 +265,9 @@ const HomePage: React.FC = () => {
             { type: "Wifi", description: "Connect to Wi-Fi" },
             { type: "Event", description: "Save event to calendar" },
             { type: "VCard", description: "Share contact information" },
-            { type: "Pdf", description: "Link to a PDF file" },
             { type: "App", description: "Link to your app" },
-            { type: "Images", description: "Link to an image" },
             { type: "Video", description: "Link to a video" },
             { type: "Social Media", description: "Link to social media profiles" },
-            { type: "Mp3", description: "Link to an MP3 file" },
             { type: "Location", description: "Share a location" },
             { type: "Facebook", description: "Share you facebook" },
             { type: "Twitter", description: "Share you twitter" },

@@ -28,6 +28,8 @@ import LocationForm from '../QRCodeForms/LocationForm';
 import SmsForm from '../QRCodeForms/SmsForm';
 import FacebookForm from '../QRCodeForms/FacebookForm';
 import TwitterForm from '../QRCodeForms/TwitterForm';
+import HowToUse from '../pages/HowToUse';
+import FAQPage from '../pages/FAQPage';
 
 
 const HomePage: React.FC = () => {
@@ -247,53 +249,15 @@ const HomePage: React.FC = () => {
         </Box>
       )}
 
-      <Box mt={5}>
-        <Typography variant="h5" gutterBottom>
-          QR Code Types
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          Different QR Code types you can use for Static QR Codes.
-        </Typography>
-        <Grid container spacing={3}>
-          {[
-            { type: "Link", description: "Link to any Website URL" },
-            { type: "Email", description: "Send an email" },
-            { type: "Text", description: "Share text" },
-            { type: "Call", description: "Make a call" },
-            { type: "Sms", description: "Send message" },
-            { type: "Whatsapp", description: "Send whatsapp message" },
-            { type: "Wifi", description: "Connect to Wi-Fi" },
-            { type: "Event", description: "Save event to calendar" },
-            { type: "VCard", description: "Share contact information" },
-            { type: "App", description: "Link to your app" },
-            { type: "Video", description: "Link to a video" },
-            { type: "Social Media", description: "Link to social media profiles" },
-            { type: "Location", description: "Share a location" },
-            { type: "Facebook", description: "Share you facebook" },
-            { type: "Twitter", description: "Share you twitter" },
-          ].map((item) => (
-            <Grid item xs={12} sm={4} key={item.type}>
-              <Paper
-                elevation={3}
-                style={{ padding: "20px", textAlign: "center" }}
-              >
-                <Typography variant="h6" gutterBottom>
-                  {item.type}
-                </Typography>
-                <Typography variant="body2" gutterBottom>
-                  {item.description}
-                </Typography>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "teal" }}
-                  onClick={() => setSelectedType(item.type)}
-                >
-                  Choose
-                </Button>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
+      {/* Adding space before and after FAQPage */}
+      <Box mt={4} mb={4}>
+        <HowToUse />
+      </Box>
+
+
+     {/* Adding space before and after FAQPage */}
+     <Box mt={4} mb={4}>
+        <FAQPage />
       </Box>
     </Container>
   );

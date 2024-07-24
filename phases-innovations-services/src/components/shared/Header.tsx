@@ -23,7 +23,7 @@ const HeaderRoot = styled('div')(({ theme }) => ({
 const NavLinks = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexGrow: 1,
-  justifyContent: 'center',
+  width: 'min-content',
   [theme.breakpoints.down('md')]: {
     display: 'none',
   },
